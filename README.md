@@ -1,3 +1,9 @@
+- IMAPI Angular service: https://github.com/Kolman-Freecss/kf-imapi-angular
+- IMAPI Incident Service: https://github.com/Kolman-Freecss/kf-imapi-incident-service
+- IMAPI Response Team Service: https://github.com/Kolman-Freecss/kf-imapi-response-service
+- IMAPI Notification Service: https://github.com/Kolman-Freecss/kf-imapi-notification-service
+- IMAPI Authentication Gateway Service: https://github.com/Kolman-Freecss/kf-imapi-auth-gateway
+- IMAPI DevOps / Kafka Event Handling: https://github.com/Kolman-Freecss/kf-imapi-devops
 
 ---
 

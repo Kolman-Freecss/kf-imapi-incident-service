@@ -24,24 +24,22 @@ public class KafkaProducer implements IncidentEventHandlerPort {
     public static final String TOPIC = "kf_imapi_incident_channel";
     
     private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ObjectMapper objectMapper;
 
     @Override
     public Mono<Void> sendIncident(final IncidentDto incidentDto) {
         try {
-            final String jsonEvent = new ObjectMapper().writeValueAsString(incidentDto);
+            final String jsonEvent = objectMapper.writeValueAsString(incidentDto);
             log.info("Producer produced the message {}", jsonEvent);
-            return Mono.fromFuture(() -> kafkaTemplate.send(TOPIC, jsonEvent).whenComplete((recordMetadata, exception) -> {
-                if (exception != null) {
-                    log.error("Error while producing the message", exception);
-                } else {
-                    log.info("Message produced successfully");
-                }
-            })).then();
+            
+            return Mono.fromFuture(() -> kafkaTemplate.send(TOPIC, jsonEvent))
+                    .doOnSuccess(recordMetadata -> log.info("Message produced successfully"))
+                    .doOnError(exception -> log.error("Error while producing the message", exception))
+                    .then();
         } catch (JsonProcessingException e) {
             log.error("Error while producing the message", e);
             return Mono.error(e);
         }
-        // write your handlers and post-processing logic, based on your use case
     }
 
 }

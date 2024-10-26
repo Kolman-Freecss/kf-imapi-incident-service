@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  springboot-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8082:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-kf-imapi-incident-service:3306/db_kf_imapi_incident_service
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+    depends_on:
+      - mysql
+
+  mysql:
+    container_name: mysql-kf-imapi-incident-service
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_DATABASE: db_kf_imapi_incident_service
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+volumes:
+  mysql-data:

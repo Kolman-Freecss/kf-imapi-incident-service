@@ -7,11 +7,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.kolmanfreecss.kfimapiincidentservice.application.services.IncidentService;
 import org.kolmanfreecss.kfimapiincidentservice.domain.dto.IncidentDto;
 import org.kolmanfreecss.kfimapiincidentservice.infrastructure.rest.model.ResponseWrapper;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 /**
  * IncidentController
@@ -41,5 +40,56 @@ public class IncidentController {
                     return Mono.just(new ResponseWrapper<IncidentDto>(null, "Error saving Incident"));
                 });
     }
+    
+    @Operation(summary = "Get All Incidents", description = "Get all incidents")
+    @ApiResponse(responseCode = "200", description = "Incidents retrieved successfully")
+    @ApiResponse(responseCode = "500", description = "Error retrieving incidents")
+    @GetMapping("/")
+    public Mono<ResponseWrapper<List<IncidentDto>>> getAllIncidents() {
+        return incidentService.getAll()
+                .map(e -> new ResponseWrapper<>(e, "Incidents retrieved successfully"))
+                .onErrorResume(e -> {
+                    log.error("Error retrieving incidents", e);
+                    return Mono.just(new ResponseWrapper<List<IncidentDto>>(null, "Error retrieving incidents"));
+                });
+    }
+    
+    @Operation(summary = "Get Incident by id", description = "Get incident by the given incidentId")
+    @ApiResponse(responseCode = "200", description = "Incident retrieved successfully")
+    @ApiResponse(responseCode = "500", description = "Error retrieving incident")
+    @GetMapping("/{id}")
+    public Mono<ResponseWrapper<IncidentDto>> getIncidentById(final @PathVariable Long id) {
+        return incidentService.getById(id)
+                .map(e -> new ResponseWrapper<>(e, "Incident retrieved successfully"))
+                .onErrorResume(e -> {
+                    log.error("Error retrieving incident", e);
+                    return Mono.just(new ResponseWrapper<IncidentDto>(null, "Error retrieving incident"));
+                });
+    }
+    
+    @Operation(summary = "Update Incident", description = "Update Incident by userDto")
+    @ApiResponse(responseCode = "200", description = "Incident updated successfully")
+    @ApiResponse(responseCode = "500", description = "Error updating Incident")
+    @PutMapping("/")
+    public Mono<ResponseWrapper<IncidentDto>> updateIncident(final @RequestBody IncidentDto incidentDto) {
+        return incidentService.update(incidentDto)
+                .map(e -> new ResponseWrapper<>(e, "Incident updated successfully"))
+                .onErrorResume(e -> {
+                    log.error("Error updating incident", e);
+                    return Mono.just(new ResponseWrapper<IncidentDto>(null, "Error updating Incident"));
+                });
+    }
+    
+    @Operation(summary = "Delete Incident", description = "Delete Incident by incidentId")
+    @ApiResponse(responseCode = "200", description = "Incident deleted successfully")
+    @ApiResponse(responseCode = "500", description = "Error deleting Incident")
+    @DeleteMapping("/{id}")
+    public Mono<Void> deleteIncident(final @PathVariable Long id) {
+        return incidentService.delete(id)
+                .doOnSuccess(recordMetadata -> log.info("Incident deleted successfully"))
+                .doOnError(exception -> log.error("Error while deleting the incident", exception))
+                .then();
+    }
+    
 
 }

@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.util.List;
+import java.util.Objects;
+
 /**
  * IncidentService
  * Used to define the methods that the IncidentService must implement.
@@ -37,6 +40,25 @@ public class IncidentService {
         return this.incidentRepositoryPort.create(this.incidentConverter.toEntity(incidentDto))
                 .flatMap(entity -> Mono.just(this.incidentConverter.toDto(entity)))
                 .doOnNext(dto -> Schedulers.parallel().schedule(() -> this.incidentEventHandlerPort.sendIncident(dto).subscribe()));
+    }
+    
+    public Mono<List<IncidentDto>> getAll() {
+        return this.incidentRepositoryPort.getAll()
+                .flatMap(incidents -> Mono.just(incidents.stream().map(incidentConverter::toDto).toList()));
+    }
+    
+    public Mono<IncidentDto> getById(final Long id) {
+        return this.incidentRepositoryPort.getById(id)
+                .flatMap(incident -> Mono.just(Objects.requireNonNull(incident.map(incidentConverter::toDto).orElse(null))));
+    }
+    
+    public Mono<IncidentDto> update(final IncidentDto incidentDto) {
+        return this.incidentRepositoryPort.update(this.incidentConverter.toEntity(incidentDto))
+                .flatMap(entity -> Mono.just(this.incidentConverter.toDto(entity)));
+    }
+    
+    public Mono<Void> delete(final Long id) {
+        return this.incidentRepositoryPort.delete(id);
     }
     
 }

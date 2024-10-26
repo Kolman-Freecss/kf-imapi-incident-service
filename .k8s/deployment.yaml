@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kf-imapi-incident-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: kf-imapi-incident-service
+  template:
+    metadata:
+      labels:
+        app: kf-imapi-incident-service
+    spec:
+      containers:
+      - name: kf-imapi-incident-service
+        image: <YOUR_IMAGE_REPOSITORY>/myapp:latest
+        ports:
+        - containerPort: 8082

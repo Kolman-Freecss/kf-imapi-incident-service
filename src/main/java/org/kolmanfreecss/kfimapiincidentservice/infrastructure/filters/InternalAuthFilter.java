@@ -22,6 +22,8 @@ public class InternalAuthFilter extends OncePerRequestFilter {
     
     private static final String INTERNAL_AUTH_HEADER = "X-Internal-Auth";
     
+    private static final String[] PUBLIC_PATHS = {"/public", "/health", "/swagger-ui", "/v3/api-docs"};
+    
     @Value("${gateway.internal-auth-secret}")
     private String expectedInternalAuthSecret;
     
@@ -40,7 +42,12 @@ public class InternalAuthFilter extends OncePerRequestFilter {
     
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        String path = request.getRequestURI();
-        return path.startsWith("/public") || path.equals("/health");
+        final String path = request.getRequestURI();
+        for (final String publicPath : PUBLIC_PATHS) {
+            if (path.startsWith(publicPath)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

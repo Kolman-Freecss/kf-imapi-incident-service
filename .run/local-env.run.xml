@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="local-env" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
     <module name="kf-imapi-incident-service" />
-    <option name="SPRING_BOOT_MAIN_CLASS" value="org.kolmanfreecss.kfimapiincidentservice.KolmanSpringBootArchetypeApplication" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="org.kolmanfreecss.kfimapiincidentservice.KFIncidentService" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>

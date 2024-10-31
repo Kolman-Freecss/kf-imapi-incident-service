@@ -17,7 +17,7 @@ import java.util.List;
  * Used to define the methods that the IncidentController must implement.
  *
  * @version 1.0
- * @uthor Kolman-Freecss
+ * @author Kolman-Freecss
  * @see IncidentService
  */
 @AllArgsConstructor

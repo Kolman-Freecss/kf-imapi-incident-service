@@ -16,7 +16,7 @@ import java.util.Objects;
  * IncidentService
  * Used to define the methods that the IncidentService must implement.
  * 
- * @uthor Kolman-Freecss
+ * @author Kolman-Freecss
  * @version 1.0
  */
 @Service

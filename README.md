@@ -5,6 +5,14 @@
 - IMAPI Authentication Gateway Service: https://github.com/Kolman-Freecss/kf-imapi-auth-gateway
 - IMAPI DevOps / Kafka Event Handling: https://github.com/Kolman-Freecss/kf-imapi-devops
 
+## Endpoint Utils
+
+- Prometheus: http://localhost:9090
+- Grafana: http://localhost:3000
+- Zipkin: http://localhost:9411
+- Keycloak: http://localhost:8080
+- Eureka: http://localhost:8761
+
 ## Brief Description
 
 --- 

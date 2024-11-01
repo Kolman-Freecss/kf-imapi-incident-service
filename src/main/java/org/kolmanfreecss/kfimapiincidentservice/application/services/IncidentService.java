@@ -1,5 +1,6 @@
 package org.kolmanfreecss.kfimapiincidentservice.application.services;
 
+import io.micrometer.observation.annotation.Observed;
 import org.kolmanfreecss.kfimapiincidentservice.application.mappers.IncidentConverter;
 import org.kolmanfreecss.kfimapiincidentservice.application.ports.IncidentEventHandlerPort;
 import org.kolmanfreecss.kfimapiincidentservice.application.ports.IncidentRepositoryPort;
@@ -42,6 +43,9 @@ public class IncidentService {
                 .doOnNext(dto -> Schedulers.parallel().schedule(() -> this.incidentEventHandlerPort.sendIncident(dto).subscribe()));
     }
     
+    @Observed(name = "getAllIncidents",
+            contextualName = "IncidentService",
+            lowCardinalityKeyValues = {"getAllIncidents", "IncidentService"})
     public Mono<List<IncidentDto>> getAll() {
         return this.incidentRepositoryPort.getAll()
                 .flatMap(incidents -> Mono.just(incidents.stream().map(incidentConverter::toDto).toList()));

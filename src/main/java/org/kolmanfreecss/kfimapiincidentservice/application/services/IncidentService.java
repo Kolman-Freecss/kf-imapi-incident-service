@@ -6,6 +6,7 @@ import org.kolmanfreecss.kfimapiincidentservice.application.ports.IncidentEventH
 import org.kolmanfreecss.kfimapiincidentservice.application.ports.IncidentRepositoryPort;
 import org.kolmanfreecss.kfimapiincidentservice.domain.dto.IncidentDto;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -43,6 +44,7 @@ public class IncidentService {
                 .doOnNext(dto -> Schedulers.parallel().schedule(() -> this.incidentEventHandlerPort.sendIncident(dto).subscribe()));
     }
     
+    @Cacheable(value = "incidents", key = "#root.methodName")
     @Observed(name = "getAllIncidents",
             contextualName = "IncidentService",
             lowCardinalityKeyValues = {"getAllIncidents", "IncidentService"})

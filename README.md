@@ -41,6 +41,7 @@ Features:
 - Observability - Micrometer Tracing and Zipkin (Distributed Tracing) (Sleuth is deprecated)
   - We use AOP support to decorate the methods with tracing annotations.
 - Prometheus and Grafana (Monitoring)
+- Redis (Caching)
 
 ---
 
